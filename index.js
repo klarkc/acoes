@@ -30,7 +30,10 @@ function imprimeStops(args, stops = 3) {
             console.log('lucro de', l, '% não realisável');
         }
     } else {
-        const qtd = (q - stops) / stops;
+        const lastQ = q - stops;
+        const qtd = lastQ / stops;
+        const maxLoss = cost - sl * lastQ;
+
         console.log('lucro de', l, '% com a seguinte configuração');
         console.log('trigger', t);
         console.log('stop loss', sl);
@@ -43,6 +46,7 @@ function imprimeStops(args, stops = 3) {
         }
         console.log('=> custo da operação', Math.floor(cost));
         console.log('=> lucro da operação', Math.floor(profit));
+        console.log('=> perda máxima', Math.floor(maxLoss));
     }
 }
 
