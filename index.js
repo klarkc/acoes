@@ -12,9 +12,9 @@ const conf = new Configstore(pkg.name, {
 });
 
 function imprimeStops(args, stops = 3) {
-    const { _, l, i, o, cl } = args;
+    const { _, l, i, o, c, a } = args;
     const [cmd, t, sl, sg1, sg2, sg3] = _;
-    let q = stops;
+    let q = stops; // n acoes
     let cost = 0;
     let profit = 0;
     let done = false;
@@ -33,9 +33,9 @@ function imprimeStops(args, stops = 3) {
         cost = buy + taxes;
         profit = sell - cost;
         const minProfit = buy * l / 100;
-        done = profit >= minProfit && cost < cl;
+        done = profit >= minProfit && cost < c;
         q += stops;
-    } while (!done && q < 10000);
+    } while (!done && q <= a);
     if (!done) {
         if (l > 1) {
             const newL = Math.floor(l * .9);
