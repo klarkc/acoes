@@ -1,37 +1,48 @@
-function imprimeStops(args) {
+function imprimeStops(args, stops = 3) {
     const { _, l, tx, op } = args;
     const [cmd, t, sl, sg1, sg2, sg3] = _;
-    let q = 3;
+    let q = stops;
     let cost = 0;
     let profit = 0;
     do {
-        const qq = q / 3;
-        const taxes = op + op * (1 + tx / 100) * 2;
+        const qq = q / stops;
+        const nOps = 2 + stops;
+        const taxes = op * nOps + (op * (1 + tx / 100)) * nOps;
         const buy = t * q;
-        const sell = sg1 * qq + sg2 * qq + sg3 * qq;
+        let sell = sg1 * qq
+        if (stops > 1) {
+            sell += sg2 * qq;
+        }
+        if (stops > 2) {
+            sell += sg3 * qq;
+        }
         cost = buy + taxes;
         profit = sell - cost;
         const minProfit = buy * l / 100;
         done = profit >= minProfit;
-        q += 3;
+        q += stops;
     } while (!done && q < 10000);
     if (!done) {
         if (l > 1) {
             const newL = Math.floor(l * .9);
-            imprimeStops({...args, l: newL});
+            imprimeStops({...args, l: newL}, stops);
         } else {
             console.log('lucro de', l, '% não realisável');
         }
     } else {
-        const qtd = (q - 3) / 3;
+        const qtd = (q - stops) / stops;
         console.log('lucro de', l, '% com a seguinte configuração');
-        console.log('=> trigger', t);
-        console.log('=> stop loss', sl);
-        console.log('=> stop gain em', sg1, 'com', qtd, 'ações');
-        console.log('=> stop gain em', sg2, 'com', qtd, 'ações');
-        console.log('=> stop gain em', sg3, 'com', qtd, 'ações');
-        console.log('custo da operação', Math.floor(cost));
-        console.log('lucro da operação', Math.floor(profit));
+        console.log('trigger', t);
+        console.log('stop loss', sl);
+        console.log('stop gain em', sg1, 'com', qtd, 'ações');
+        if (stops > 1) {
+            console.log('stop gain em', sg2, 'com', qtd, 'ações');
+        }
+        if (stops > 2) {
+            console.log('stop gain em', sg3, 'com', qtd, 'ações');
+        }
+        console.log('=> custo da operação', Math.floor(cost));
+        console.log('=> lucro da operação', Math.floor(profit));
     }
 }
 
@@ -55,4 +66,11 @@ const argv = require('yargs')
     .help('h')
     .argv;
 
-imprimeStops(argv)
+console.log('== SIMULAÇÃO 1 ==');
+imprimeStops(argv, 1);
+console.log('');
+console.log('== SIMULAÇÃO 2 ==');
+imprimeStops(argv, 2);
+console.log('');
+console.log('== SIMULAÇÃO 3 ==');
+imprimeStops(argv, 3);
