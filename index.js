@@ -9,7 +9,7 @@ function imprimeStops(args) {
         const taxes = op + op * (1 + tx / 100) * 2;
         const buy = t * q;
         const sell = sg1 * qq + sg2 * qq + sg3 * qq;
-        cost = buy + taxes
+        cost = buy + taxes;
         profit = sell - cost;
         const minProfit = buy * l / 100;
         done = profit >= minProfit;
@@ -23,12 +23,13 @@ function imprimeStops(args) {
             imprimeStops({...args, l: newL});
         }
     } else {
+        const qtd = (q - 3) / 3;
         console.log('lucro de', l, '% com a seguinte configuração');
         console.log('=> trigger', t);
         console.log('=> stop loss', sl);
-        console.log('=> stop gain em', sg1, 'com', q/3, 'ações');
-        console.log('=> stop gain em', sg2, 'com', q/3, 'ações');
-        console.log('=> stop gain em', sg3, 'com', q/3, 'ações');
+        console.log('=> stop gain em', sg1, 'com', qtd, 'ações');
+        console.log('=> stop gain em', sg2, 'com', qtd, 'ações');
+        console.log('=> stop gain em', sg3, 'com', qtd, 'ações');
         console.log('custo da operação', Math.floor(cost));
         console.log('lucro da operação', Math.floor(profit));
     }
