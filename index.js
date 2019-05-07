@@ -1,13 +1,27 @@
+const Configstore = require('configstore');
+const pkg = require('./package.json');
+
+// create a Configstore instance with an unique ID e.g.
+// Package name and optionally some default values
+const conf = new Configstore(pkg.name, { 
+    valorOperacao: 0,
+    taxaImposto: 0,
+    lucro: 30,
+    custo: 10000,
+    acoes: 1000,
+});
+
 function imprimeStops(args, stops = 3) {
-    const { _, l, tx, op, cl } = args;
+    const { _, l, i, o, cl } = args;
     const [cmd, t, sl, sg1, sg2, sg3] = _;
     let q = stops;
     let cost = 0;
     let profit = 0;
+    let done = false;
     do {
         const qq = q / stops;
         const nOps = 2 + stops;
-        const taxes = op * nOps + (op * (1 + tx / 100)) * nOps;
+        const taxes = o * nOps + (o * (1 + i / 100)) * nOps;
         const buy = t * q;
         let sell = sg1 * qq
         if (stops > 1) {
@@ -54,22 +68,26 @@ const argv = require('yargs')
     .usage('Uso: $0 <comando> [opcoes]')
     .command('stops', 'Retorna os stops com a quantidade de ações')
     .example('$0 stops 12.3 10 14.4 16 18.8', 'Retorna os stops com a quantidade ideal para uma ação com trigger 12.3, stoploss 10, stopgain 14.4, stopgain 16 e stopgain 18.8')
-    .alias('op', 'valorOperacao')
-    .nargs('op', 1)
-    .default('op', 6.98)
-    .describe('op', 'Valor da operação (corretagem)')
-    .alias('tx', 'taxaImposto')
-    .nargs('tx', 1)
-    .default('tx', 5)
-    .describe('tx', 'Porcentagem de impostos')
+    .alias('o', 'valorOperacao')
+    .nargs('o', 1)
+    .default('o', conf.get('valorOperacao'))
+    .describe('o', 'Valor da operação (corretagem)')
+    .alias('i', 'taxaImposto')
+    .nargs('i', 1)
+    .default('i', conf.get('taxaImposto'))
+    .describe('i', 'Porcentagem de impostos na Taxa de operação')
     .alias('l', 'lucro')
     .nargs('l', 1)
-    .default('l', 10)
+    .default('l', conf.get('lucro'))
     .describe('l', 'Porcentagem de lucro máximo')
-    .alias('cl', 'custo')
-    .nargs('cl', 1)
-    .default('cl', 2000)
-    .describe('cl', 'Custo limite para comprar ações')
+    .alias('c', 'custo')
+    .nargs('c', 1)
+    .default('c', conf.get('custo'))
+    .describe('c', 'Custo limite para comprar ações')
+    .alias('a', 'acoes')
+    .nargs('a', 1)
+    .default('a', conf.get('acoes'))
+    .describe('a', 'Número máximo de ações para efetuar compra')
     .alias('h', 'help')
     .help('h')
     .argv;
