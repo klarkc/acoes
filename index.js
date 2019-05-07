@@ -16,11 +16,11 @@ function imprimeStops(args) {
         q += 3;
     } while (!done && q < 10000);
     if (!done) {
-        console.log('lucro de', l, '% não realisável');
         if (l > 1) {
             const newL = Math.floor(l * .9);
-            console.log('tentando com lucro de', newL, '%');
             imprimeStops({...args, l: newL});
+        } else {
+            console.log('lucro de', l, '% não realisável');
         }
     } else {
         const qtd = (q - 3) / 3;
