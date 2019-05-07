@@ -24,11 +24,11 @@ function imprimeStops(args) {
         }
     } else {
         console.log('lucro de', l, '% com a seguinte configuração');
-        console.log('trigger', t);
-        console.log('stop loss', sl);
-        console.log('stop gain em', sg1, 'com', q/3, 'ações');
-        console.log('stop gain em', sg2, 'com', q/3, 'ações');
-        console.log('stop gain em', sg3, 'com', q/3, 'ações');
+        console.log('=> trigger', t);
+        console.log('=> stop loss', sl);
+        console.log('=> stop gain em', sg1, 'com', q/3, 'ações');
+        console.log('=> stop gain em', sg2, 'com', q/3, 'ações');
+        console.log('=> stop gain em', sg3, 'com', q/3, 'ações');
         console.log('custo da operação', Math.floor(cost));
         console.log('lucro da operação', Math.floor(profit));
     }
