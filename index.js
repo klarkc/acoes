@@ -1,5 +1,5 @@
 function imprimeStops(args, stops = 3) {
-    const { _, l, tx, op } = args;
+    const { _, l, tx, op, cl } = args;
     const [cmd, t, sl, sg1, sg2, sg3] = _;
     let q = stops;
     let cost = 0;
@@ -19,7 +19,7 @@ function imprimeStops(args, stops = 3) {
         cost = buy + taxes;
         profit = sell - cost;
         const minProfit = buy * l / 100;
-        done = profit >= minProfit;
+        done = profit >= minProfit && cost < cl;
         q += stops;
     } while (!done && q < 10000);
     if (!done) {
@@ -62,6 +62,10 @@ const argv = require('yargs')
     .nargs('l', 1)
     .default('l', 30)
     .describe('l', 'Porcentagem de lucro mínimo')
+    .alias('cl', 'custo')
+    .nargs('cl', 1)
+    .default('cl', 1000)
+    .describe('cl', 'Custo limite para comprar ações')
     .alias('h', 'help')
     .help('h')
     .argv;
