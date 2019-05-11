@@ -16,7 +16,6 @@ function imprimeStops(args, stops = 3) {
     const { _, l, i, o, c, a, f } = args;
     const [cmd, t, sl, sg1, sg2, sg3] = _;
     let q = f?stops:stops*100; // n acoes
-    let cost = 0;
     let profit = 0;
     let done = false;
     do {
@@ -31,7 +30,7 @@ function imprimeStops(args, stops = 3) {
         if (stops > 2) {
             sell += sg3 * qq;
         }
-        cost = buy + taxes;
+        const cost = buy + taxes;
         profit = sell - cost;
         const minProfit = buy * l / 100;
         done = profit >= minProfit && cost < c;
@@ -47,7 +46,9 @@ function imprimeStops(args, stops = 3) {
     } else {
         const lastQ = q - (f?stops:f*100);
         const qtd = lastQ / stops;
-        const maxLoss = t * lastQ - sl * lastQ;
+        const cost = t * lastQ;
+        const loss = sl * lastQ;
+        const maxLoss = cost - loss;
 
         console.log('lucro de', l, '% com a seguinte configuração');
         console.log('trigger', t);
