@@ -34,8 +34,8 @@ function imprimeStops(args, stops = 3) {
         profit = sell - cost;
         const minProfit = buy * l / 100;
         done = profit >= minProfit && cost < c;
-        q += f?stops:stops*100;
-    } while (!done && q <= a);
+        if (!done) q += f?stops:stops*100;
+    } while (!done && q < a);
     if (!done) {
         if (l > 1) {
             const newL = Math.floor(l * .9);
@@ -44,10 +44,9 @@ function imprimeStops(args, stops = 3) {
             console.log('lucro de', l, '% não realisável');
         }
     } else {
-        const lastQ = q - (f?stops:f*100);
-        const qtd = lastQ / stops;
-        const cost = t * lastQ;
-        const loss = sl * lastQ;
+        const qtd = q / stops;
+        const cost = t * q;
+        const loss = sl * q;
         const maxLoss = cost - loss;
 
         console.log('lucro de', l, '% com a seguinte configuração');
