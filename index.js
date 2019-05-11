@@ -9,12 +9,13 @@ const conf = new Configstore(pkg.name, {
     lucro: 30,
     custo: 10000,
     acoes: 1000,
+    fracionadas: false,
 });
 
 function imprimeStops(args, stops = 3) {
-    const { _, l, i, o, c, a } = args;
+    const { _, l, i, o, c, a, f } = args;
     const [cmd, t, sl, sg1, sg2, sg3] = _;
-    let q = stops; // n acoes
+    let q = f?stops:stops*100; // n acoes
     let cost = 0;
     let profit = 0;
     let done = false;
@@ -34,7 +35,7 @@ function imprimeStops(args, stops = 3) {
         profit = sell - cost;
         const minProfit = buy * l / 100;
         done = profit >= minProfit && cost < c;
-        q += stops;
+        q += f?stops:stops*100;
     } while (!done && q <= a);
     if (!done) {
         if (l > 1) {
@@ -44,9 +45,9 @@ function imprimeStops(args, stops = 3) {
             console.log('lucro de', l, '% não realisável');
         }
     } else {
-        const lastQ = q - stops;
+        const lastQ = q - (f?stops:f*100);
         const qtd = lastQ / stops;
-        const maxLoss = cost - sl * lastQ;
+        const maxLoss = t * lastQ - sl * lastQ;
 
         console.log('lucro de', l, '% com a seguinte configuração');
         console.log('trigger', t);
@@ -88,6 +89,9 @@ const argv = require('yargs')
     .nargs('a', 1)
     .default('a', conf.get('acoes'))
     .describe('a', 'Número máximo de ações para efetuar compra')
+    .alias('f', 'fracionadas')
+    .default('f', conf.get('fracionadas'))
+    .describe('f', 'Permitir ações fracionadas')
     .alias('h', 'help')
     .help('h')
     .argv;
