@@ -96,11 +96,15 @@ const argv = require('yargs')
     .help('h')
     .argv;
 
-console.log('== SIMULAÇÃO 1 ==');
-imprimeStops(argv, 1);
-console.log('');
-console.log('== SIMULAÇÃO 2 ==');
-imprimeStops(argv, 2);
-console.log('');
-console.log('== SIMULAÇÃO 3 ==');
-imprimeStops(argv, 3);
+if (argv._[0] === 'stops') {
+    console.log('== SIMULAÇÃO 1 ==');
+    imprimeStops(argv, 1);
+    console.log('');
+    console.log('== SIMULAÇÃO 2 ==');
+    imprimeStops(argv, 2);
+    console.log('');
+    console.log('== SIMULAÇÃO 3 ==');
+    imprimeStops(argv, 3);
+} else {
+    console.log('Comando inválido, use -h para obter ajuda.');
+}
